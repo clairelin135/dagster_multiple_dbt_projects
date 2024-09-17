@@ -47,6 +47,7 @@ jobs:
           cd project-repo
           pip install . --upgrade --upgrade-strategy eager
           dagster-dbt project prepare-and-package --file assets_dbt_python/project.py
+          dagster-dbt project prepare-and-package --file assets_dbt_python/project_2.py
         shell: bash
 
       - name: Python Executable Deploy
