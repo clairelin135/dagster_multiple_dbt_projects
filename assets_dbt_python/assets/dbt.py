@@ -32,9 +32,17 @@ def dbt_project_assets(context: AssetExecutionContext, dbt: DbtCliResource):
     yield from dbt.cli(["build"], context=context).stream()
 
 
+class OtherDagsterDbtTranslator(DagsterDbtTranslator):
+    def get_asset_key(self, dbt_resource_props: Mapping[str, Any]) -> AssetKey:
+        asset_key = super().get_asset_key(dbt_resource_props)
+        asset_key = asset_key.with_prefix(["test"])
+
+        return asset_key
+
+
 @dbt_assets(
     manifest=dbt_project_2.manifest_path,
-    dagster_dbt_translator=CustomDagsterDbtTranslator(),
+    dagster_dbt_translator=OtherDagsterDbtTranslator(),
 )
 def dbt_project_assets_2(context: AssetExecutionContext, dbt: DbtCliResource):
     yield from dbt.cli(["build"], context=context).stream()
